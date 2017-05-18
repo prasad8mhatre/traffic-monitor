@@ -1,10 +1,10 @@
 {
-  "name": "kanban-board",
+  "name": "traffic-monitor",
   "version": "1.0.0",
-  "description": "kanban-board using MEAN Stack",
+  "description": "Traffic-monitor using MEAN Stack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/prasad8mhatre/kanban-board.git"
+    "url": "https://github.com/prasad8mhatre/traffic-monitor.git"
   },
   "author": "Prasad Mhatre",
   "license": "Apache License 2.0",

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc overview
- * @name kanbanApp
+ * @name traffic-monitor
  * @description
- * # kanbanApp
+ * # traffic-monitor
  *
  * Main module of the application.
  */
-var app = angular.module('kanbanApp', [
+var app = angular.module('traffic-monitor', [
   'ui.router',
   'ncy-angular-breadcrumb',
   'angular-loading-bar',
@@ -46,44 +46,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
     ncyBreadcrumb: {
       label: 'Home'
     }
-  }).state('app.home.teams', {
-    url: '/teams',
-    templateUrl: 'views/home/teams.html',
-    controller: 'TeamsCtrl',
-    data: {
-      title: 'Teams'
-    },
-    ncyBreadcrumb: {
-      label: 'Team'
-    }
   });
 
-  $stateProvider.state('app.home.teams.boards', {
-    url: '/boards',
-    templateUrl: 'views/home/boards.html',
-    controller: 'BoardsCtrl',
-    data: {
-      title: 'Boards'
-    },
-    ncyBreadcrumb: {
-      label: 'Boards'
-    }
-  }).state('app.home.teams.boards.boardsDetails', {
-    url: '/board/:boardId',
-    templateUrl: 'views/home/board.html',
-    controller: 'BoardCtrl',
-    data: {
-      title: 'Board'
-    },
-    ncyBreadcrumb: {
-      label: '{{boardId}}'
-    },
-   resolve:{
-      boardId: ['$stateParams', function($stateParams){
-          return $stateParams.boardId;
-      }]
-   }
-  });
+
 
 
   $stateProvider.state('app.dash', {
