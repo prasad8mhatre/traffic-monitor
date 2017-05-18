@@ -19,7 +19,8 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
-var jwt         = require('jwt-simple');
+const jwt         = require('jwt-simple');
+const osmread = require('osm-read');
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -115,6 +116,47 @@ app.use('/', routes);
 //interscepting api and app with authenticated check
 app.use('/app', passportConfig.isAuthenticated, express.static(__dirname + '/app/app'));
 app.use('/api', passportConfig.isAuthenticated, api);
+
+
+var map = new Map();
+
+
+//osm parser
+var parser = osmread.parse({
+    filePath: './data/map.xml',
+    endDocument: function(){
+        console.log('document end');
+    },
+    bounds: function(bounds){
+        console.log('bounds: ' + JSON.stringify(bounds));
+    },
+    node: function(node){
+      //  console.log('node: ' + JSON.stringify(node));
+      map.set(node.id, node);
+    },
+    way: function(way){
+        if(way.tags.highway == 'primary' || way.tags.highway == 'secondary'){
+          console.log(way.tags.name + "****************************************************");
+          
+          way.nodeRefs.forEach(function(val, key) {
+              way.nodeRefs[key] = map.get(val);
+              console.log(way.nodeRefs[key].lat + " ," + way.nodeRefs[key].lon);
+
+          });
+          console.log('way: ' + JSON.stringify(way));
+
+          //console.log('way: ' + JSON.stringify(way));
+        }
+    },
+    relation: function(relation){
+      //  console.log('relation: ' + JSON.stringify(relation));
+    },
+    error: function(msg){
+        console.log('error: ' + msg);
+    }
+});
+
+
 
 
 /**
