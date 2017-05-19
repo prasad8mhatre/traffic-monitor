@@ -56,7 +56,7 @@ exports.delete = function (req, res) {
 
 //Controller methods
 
-exports.create = function (road) {
+exports.createRoad = function (road) {
     Road.create(road, function(err, result) {
         if (!err) {
             return JSON.stringify(result);
@@ -66,7 +66,7 @@ exports.create = function (road) {
     });
 };
 
-exports.get = function (road) {
+exports.getRoad = function (road) {
     Road.get({_id: road.id}, function(err, result) {
         if (!err) {
             return JSON.stringify(result);
@@ -76,7 +76,7 @@ exports.get = function (road) {
     });
 };
 
-exports.getAll = function () {
+exports.getAllRoad = function () {
     Road.getAll({}, function(err, result) {
         if (!err) {
             return JSON.stringify(result);
@@ -86,7 +86,7 @@ exports.getAll = function () {
     });
 };
 
-exports.update = function (road) {
+exports.updateRoad = function (road) {
     Road.updateById(road.id, road, function(err, result) {
         if (!err) {
             return JSON.stringify(result);
@@ -96,7 +96,7 @@ exports.update = function (road) {
     });
 }
 
-exports.delete = function (road) {
+exports.deleteRoad = function (road) {
     Road.removeById({_id: road.id}, function(err, result) {
         if (!err) {
             return JSON.stringify(result);

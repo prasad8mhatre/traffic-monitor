@@ -20,7 +20,7 @@ var RoadSchema = new Schema({
   lanes : { type: Number },
   updatedTime :  Date,
   highway: String,
-  adjacentRoadId : [Schema.Types.ObjectId],
+  adjacentRoadId : [String],
   vehicles : [String]
 
 });
@@ -28,7 +28,7 @@ var RoadSchema = new Schema({
 
 RoadSchema.statics = {
 
-     
+
     get: function(query, callback) {
         this.findOne(query, callback);
     },
