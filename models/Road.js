@@ -2,7 +2,9 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
+require('mongoose-double')(mongoose);
 
+var SchemaTypes = mongoose.Schema.Types;
 
 var RoadSchema = new Schema({
   roadId : String,
@@ -11,13 +13,13 @@ var RoadSchema = new Schema({
   end: String,
   length: { type: Number },
   weight: { type: Number },
-  capacity :{ type: Number },
+  capacity : SchemaTypes.Double,
   speed :{ type: Number },
   vehicle_count : { type: Number },
   isCongestion: Boolean,
   color: String,
   isOneWay : Boolean,
-  lanes : { type: Number },
+  lanes : String,
   updatedTime :  Date,
   highway: String,
   adjacentRoadId : [String],
@@ -35,8 +37,8 @@ RoadSchema.statics = {
     getAll: function(query, callback) {
         this.find(query, callback);
     },
-    updateById: function(id, updateData, callback) {
-        this.update(id, {$set: updateData}, callback);
+    updateById: function(roadId, updateData, callback) {
+        this.update(roadId, {$set: updateData}, callback);
     },
     remove: function(removeData, callback) {
          this.remove(removeData, callback);

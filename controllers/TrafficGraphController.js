@@ -1,6 +1,8 @@
 'use strict';
 
 var TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
+const trafficManager = require('../managers/trafficManager');
+
 
 exports.create = function (req, res) {
     TrafficGraph.create(req.body, function(err, result) {
@@ -52,3 +54,86 @@ exports.delete = function (req, res) {
         }
     });
 }
+
+
+//controller methods
+
+exports.createTrafficMap = function (edge) {
+    return new Promise(function (fulfill, reject){   
+        TrafficGraph.create(edge, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+};
+
+exports.getTrafficMap = function (edge) {
+    return new Promise(function (fulfill, reject){   
+        TrafficGraph.get({roadId: edge.roadId}, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+};
+
+exports.getAllTrafficMap = function () {
+    return new Promise(function (fulfill, reject){   
+        TrafficGraph.getAll({}, function(err, result) {
+           if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+};
+
+exports.updateTrafficMap = function (edge) {
+    return new Promise(function (fulfill, reject){  
+        TrafficGraph.updateById(edge.roadId, edge, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+}
+
+exports.deleteTrafficMap = function (edge) {
+    return new Promise(function (fulfill, reject){  
+        TrafficGraph.removeById({_id: edge.id}, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+}
+
+exports.addTrafficData = function(req, res){
+    //get lat lon and find edge 
+    var trafficUpdate = {};
+    trafficUpdate.location = {};
+    trafficUpdate.location.lat = req.lat;
+    trafficUpdate.location.long = req.long;
+    trafficUpdate.speed = req.speed;
+    trafficUpdate.vehiclePubNubId = req.vehiclePubNubId;
+    trafficUpdate.timestamp = req.timestamp;
+    trafficUpdate.edgeId = req.edgeId;
+    trafficManager.calculateTraffic(trafficUpdate).then(function(result){
+        console.log("CalculateTraffic result:" + result);
+        return res.json(result);
+    }, function(err){
+        console.log("CalculateTraffic Error:" + err);
+        return res.json(err);
+    });
+}
+

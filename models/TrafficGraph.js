@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
 
 
 var TrafficGraphSchema = new Schema({
-  roadId : { type: Number },
-  road : [Schema.Types.ObjectId],
+  roadId : String,    
+  road : Schema.Types.ObjectId,
 
 });
 

@@ -1,0 +1,92 @@
+const mongoose = require('mongoose');
+
+const TrafficGraphController = require('../controllers/TrafficGraphController');
+const RoadController = require('../controllers/RoadController');
+
+var Road = require('../models/Road').Road;
+const TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
+
+const osmManager = require('../managers/osmManager');
+
+const car_length = process.env.car_length;
+const empty_car_space = process.env.empty_car_space;
+const fuel_consumption = process.env.fuel_consumption;
+
+exports.calculateTraffic = function (trafficUpdate) {
+    return new Promise(function (fulfill, reject){  
+    	var globalTrafficMap = osmManager.getGloabalTrafficMap();
+    	var road = globalTrafficMap.get(trafficUpdate.edge);
+
+    	var vehicle = {};
+    	vehicle.vehiclePubNubId = trafficUpdate.vehiclePubNubId;
+    	vehicle.timestamp = trafficUpdate.timestamp;
+    	vehicle.location = trafficUpdate.location;
+    	vehicle.edge = trafficUpdate.edge;
+    	road.vehicles.push(JSON.stringify(vehicle));
+
+    	road.weight = calculateWeight(road, trafficUpdate);
+    	road.speed = smoothSpeed(road, trafficUpdate);
+    	road.vehicle_count = road.vehicle_count + 1;
+    	road.isCongestion = detectCongestion(road);
+    	road.color = setColor(road);	
+    	
+    	if(road != null){
+	    	RoadController.updateRoad(road).then(function(resp){
+	           console.log("**********response:"+resp);
+	           fulfill(resp);
+	        }, function(err){
+	           console.log("Road Query Error:"+err);
+	           reject(err); // 500 error
+	        });
+    	}
+    });
+};
+
+var calculateWeight = function(road, trafficUpdate){
+	/*cost function = (d, cl, n, f)
+	d = distance
+	Cl = car length (3.2 to 5m ) = 4m
+	N = no. of cars
+	f = fuel consumption (10km/ltr.) = 0.001 ltr/m
+	Ex. d = 100m, cl = 4m, N = 4, f= 0.001 ltr/m
+	Cost = (d*f )+ (cl*N) = 16.4*/
+
+	//TODO: Smooth with historical data and output the result
+	return (road.length * fuel_consumption) + (car_length * road.vehicles.length);
+}
+
+var smoothSpeed = function(road, trafficUpdate){
+	var speed = 0;
+	if(road.speed != null){
+		speed  = (road.speed + trafficUpdate.speed)/2;
+	}
+	//TODO: smooth the speed	
+	return speed;
+}
+
+var detectCongestion = function(road){
+	
+	//Need to change for simulation
+	if(road.vehicles.length > road.capacity){
+		return true;
+	}else{
+		return false;
+	}
+};
+
+var setColor = function(road){
+	/*Green means there are no traffic delays.
+	Orange means there's a medium amount of traffic.
+	Red means there are traffic delays. 
+	The more red, the slower the speed of traffic on the road.*/
+
+
+	if(road.vehicles.length > road.capacity){
+		return "RED";
+	}else if((road.vehicles.length > (road.capacity/2)) && (road.vehicles.length <= road.capacity)){
+		return "ORANGE";
+	}else{
+		return "GREEN";
+	}
+}
+

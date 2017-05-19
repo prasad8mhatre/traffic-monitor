@@ -38,6 +38,7 @@
     "lob": "^3.9.0",
     "lusca": "^1.4.1",
     "mongoose": "^4.6.6",
+    "mongoose-double": "0.0.1",
     "morgan": "^1.7.0",
     "multer": "^1.2.0",
     "node-foursquare": "^0.3.0",
