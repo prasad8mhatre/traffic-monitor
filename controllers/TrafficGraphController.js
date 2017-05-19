@@ -119,15 +119,16 @@ exports.deleteTrafficMap = function (edge) {
 }
 
 exports.addTrafficData = function(req, res){
-    //get lat lon and find edge 
+    //get lat lon and find edge
     var trafficUpdate = {};
     trafficUpdate.location = {};
-    trafficUpdate.location.lat = req.lat;
-    trafficUpdate.location.long = req.long;
-    trafficUpdate.speed = req.speed;
-    trafficUpdate.vehiclePubNubId = req.vehiclePubNubId;
-    trafficUpdate.timestamp = req.timestamp;
-    trafficUpdate.edgeId = req.edgeId;
+    trafficUpdate.location.lat = req.body.lat;
+    trafficUpdate.location.long = req.body.long;
+    trafficUpdate.speed = req.body.speed;
+    trafficUpdate.vehiclePubNubId = req.body.vehiclePubNubId;
+    //quickfix for testing remove it
+    trafficUpdate.timestamp = new Date();
+    trafficUpdate.edgeId = req.body.edgeId;
     trafficManager.calculateTraffic(trafficUpdate).then(function(result){
         console.log("CalculateTraffic result:" + result);
         return res.json(result);

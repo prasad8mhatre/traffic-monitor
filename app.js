@@ -119,7 +119,7 @@ app.use('/', routes);
 //interscepting api and app with authenticated check
 app.use('/app', passportConfig.isAuthenticated, express.static(__dirname + '/app/app'));
 app.use('/api', passportConfig.isAuthenticated, api);
-app.use('/trafficGraph', passportConfig.isAuthenticated, trafficGraph); 
+app.use('/traffic', passportConfig.isAuthenticated, trafficGraph); 
 
 //INIT: call osmManager
 osmManager.parseOsm();

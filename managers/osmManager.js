@@ -8,8 +8,6 @@ const RoadController = require('../controllers/RoadController');
 var Road = require('../models/Road').Road;
 const TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
 
-const car_length = process.env.car_length;
-const empty_car_space = process.env.empty_car_space;
 
 this.TrafficGraphMap = {};
 
@@ -96,7 +94,9 @@ var populateRoad = function(way) {
      *  2.5 - Avg distance between two cars - empty_car_space
      *  capacity(no. of vehicle ocupancy = road_length / (car_lengt * empty_car_space * road_lanes))
      */
-    road.capacity = road.length / (car_length * empty_car_space * parseInt(road.lanes != null ? road.lanes : "1"));
+    var car_length = process.env.car_length;
+    var empty_car_space = process.env.empty_car_space;
+    road.capacity = road.length / (car_length * empty_car_space * parseInt((road.lanes != null && road.lanes != undefined) ? road.lanes : "1"));
     /* weight: { type: Number },
      capacity :{ type: Number },
      speed :{ type: Number },

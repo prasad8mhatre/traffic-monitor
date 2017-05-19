@@ -13,7 +13,7 @@ var RoadSchema = new Schema({
   end: String,
   length: { type: Number },
   weight: { type: Number },
-  capacity : SchemaTypes.Double,
+  capacity : { type: Number },
   speed :{ type: Number },
   vehicle_count : { type: Number },
   isCongestion: Boolean,
