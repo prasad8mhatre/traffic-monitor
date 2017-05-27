@@ -1,0 +1,66 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.5622281 ,73.7840667],
+                    [18.5621983 ,73.7840871]
+                ]
+            },
+            "properties": {
+                "popupContent": "This is a free bus line that will take you across downtown.",
+                "underConstruction": false
+            },
+            "id": 1
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.5621983 ,73.7840871],
+                    [18.5621623 ,73.7841117]
+                ]
+            },
+            "properties": {
+                "popupContent": "This is a free bus line that will take you across downtown.",
+                "underConstruction": true
+            },
+            "id": 2
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.5621623 ,73.7841117],
+                    [18.5620815 ,73.7841822]
+                ]
+            },
+            "properties": {
+                "popupContent": "This is a free bus line that will take you across downtown.",
+                "underConstruction": true
+            },
+            "id": 3
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [18.5620815 ,73.7841822],
+                    [18.5619733 ,73.7843071     ]
+                ]
+            },
+            "properties": {
+                "popupContent": "This is a free bus line that will take you across downtown.",
+                "underConstruction": true
+            },
+            "id": 4
+        }
+
+    ]
+}

@@ -38,6 +38,8 @@ exports.calculateTraffic = function(trafficUpdate) {
             road.isCongestion = detectCongestion(road);
             road.color = setColor(road);
 
+            //TODO:send traffic congestion notification
+
             console.log("road: " + JSON.stringify(road));
             if (road != null) {
                 RoadController.updateRoad(road).then(function(resp) {
@@ -93,6 +95,7 @@ var setColor = function(road) {
     /*Green means there are no traffic delays.
     Orange means there's a medium amount of traffic.
     Red means there are traffic delays. 
+    GREY means no traffic density/ update found.
     The more red, the slower the speed of traffic on the road.*/
 
 
@@ -100,7 +103,52 @@ var setColor = function(road) {
         return "RED";
     } else if ((road.vehicles.length > (road.capacity / 2)) && (road.vehicles.length <= road.capacity)) {
         return "ORANGE";
-    } else {
+    } else if((road.vehicles.length < (road.capacity / 2)) && (road.vehicles.length <= road.capacity))  {
         return "GREEN";
+    }else{
+        return "GREY";
     }
 }
+
+
+exports.getTraffic = function(color){
+    return new Promise(function(fulfill, reject) {
+        RoadController.getTraffic(color).then(function(resp) {
+            console.log("**********response:" + resp);
+            //create geojson 
+
+
+            fulfill(getGeoJson(resp));
+        }, function(err) {
+            console.log("Road Query Error:" + err);
+            reject(err); // 500 error
+        });
+
+    });
+}
+
+
+var getGeoJson = function(resp){
+    var geoJson = {};
+    geojson.type = "FeatureCollection";
+    geojson.features = [];
+
+    resp.forEach(function(val, index) {
+      var feature = {};
+      feature.type = "Feature";
+      feature.id = val.id;
+      feature.geometry = {};
+      feature.geometry.type = "LineString";
+      var start = JSON.parse(resp.start);
+      var end = JSON.parse(resp.end);
+      var cod1 = start.lon + ',' + start.lat;
+      var cod2 = end.lon + ',' + end.lat;
+      feature.geometry.coordinates = [];
+      feature.geometry.coordinates.push(cod1);
+      feature.geometry.coordinates.push(cod2);
+    });
+    
+}
+
+
+

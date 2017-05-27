@@ -1,0 +1,31 @@
+{
+"type": "FeatureCollection",
+"features": [
+{
+  "type": "Feature",
+  "id": "way/217112808",
+  "properties": {
+    "timestamp": "2013-08-08T08:19:57Z",
+    "version": "3",
+    "changeset": "17263382",
+    "user": "singleton",
+    "uid": "1157969",
+    "highway": "primary",
+    "name": "University Road",
+    "id": "way/217112808"
+  },
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [
+        73.7840667,18.5622281 
+      ],
+      [
+       73.7981509, 18.5549762 
+      ]
+    ]
+  }
+}
+
+]
+}

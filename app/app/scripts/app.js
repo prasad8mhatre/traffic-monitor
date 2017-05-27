@@ -12,7 +12,8 @@ var app = angular.module('traffic-monitor', [
   'ui.router',
   'ncy-angular-breadcrumb',
   'angular-loading-bar',
-  'dndLists'
+  'dndLists',
+  'leaflet-directive'
 ]);
 
 
@@ -40,6 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider.state('app.home', {
     url: '/home',
     templateUrl: 'views/home/home.html',
+    controller: 'MainCtrl',
     data: {
       title: 'Home'
     },

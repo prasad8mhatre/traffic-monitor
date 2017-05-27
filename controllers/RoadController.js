@@ -116,3 +116,16 @@ exports.deleteRoad = function (road) {
         });
     });
 }
+
+
+exports.getTraffic = function (color) {
+    return new Promise(function (fulfill, reject){    
+        Road.get({color: color}, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+};

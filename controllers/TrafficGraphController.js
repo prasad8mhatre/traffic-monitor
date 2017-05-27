@@ -138,3 +138,33 @@ exports.addTrafficData = function(req, res){
     });
 }
 
+exports.getGreenTraffic =function(req, res){
+    trafficManager.getTraffic("GREEN").then(function(result){
+        console.log("green traffic result:" + result);
+        return res.json(result);
+    }, function(err){
+        console.log("green traffic Error:" + err);
+        return res.json(err);
+    });
+}
+
+exports.getRedTraffic =function(req, res){
+    trafficManager.getTraffic("RED").then(function(result){
+        console.log("RED traffic result:" + result);
+        return res.json(result);
+    }, function(err){
+        console.log("RED traffic Error:" + err);
+        return res.json(err);
+    });
+}
+
+exports.getOrangeTraffic =function(req, res){
+    trafficManager.getTraffic("ORANGE").then(function(result){
+        console.log("ORANGE traffic result:" + result);
+        return res.json(result);
+    }, function(err){
+        console.log("ORANGE traffic Error:" + err);
+        return res.json(err);
+    });
+}
+

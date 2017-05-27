@@ -8,6 +8,8 @@ const RoadController = require('../controllers/RoadController');
 var Road = require('../models/Road').Road;
 const TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
 
+const osm_geojson = require('osm-and-geojson');
+
 
 this.TrafficGraphMap = {};
 
@@ -110,6 +112,13 @@ var populateRoad = function(way) {
 
 exports.parseOsm = function() {
     //osm parser
+
+    //osm to  geojson
+
+    console.log("******************")
+    //geojson = osm_geojson.osm2geojson(process.env.mapURI, true); 
+    //console.log("*****************geojson" + JSON.stringify(geojson));
+
     var globalTrafficMap = new Map();
     var nodeMap = new Map();
     var parser = osmread.parse({
