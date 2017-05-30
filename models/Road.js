@@ -32,7 +32,7 @@ RoadSchema.statics = {
 
 
     get: function(query, callback) {
-        this.findOne(query, callback);
+        this.find(query, callback);
     },
     getAll: function(query, callback) {
         this.find(query, callback);
