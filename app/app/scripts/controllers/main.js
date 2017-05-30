@@ -12,7 +12,7 @@
     console.log("In Main Ctrl");
     $scope.Hello = "Hello";
 
-    /* Path
+    // Path
     angular.extend($scope, {
 	    center: {
 	        lat: 21.69826549685252,
@@ -42,10 +42,11 @@
             }
         },
 	});
-*/
+
 
 
      var getColor = function(densityColor){
+        debugger;
         if(densityColor == 'RED'){
             return 'red';
         }else if(densityColor == 'GREEN'){
@@ -63,7 +64,7 @@
             fillColor: 'white',
             weight: 8,
             opacity: 1,
-            color: getColor(feature.id),
+            color: getColor(feature.color),
             dashArray: '3',
             fillOpacity: 0.7
         };
@@ -80,7 +81,7 @@
 
     $scope.updateMap = function(){
         // Get the traffic data geojson data from a JSON red
-    $http.get('/traffic/trafficGraph/getRedTraffic').success(function(data, status) {
+    $http.get('file.geojson').success(function(data, status) {
         debugger;
 
         if(!$scope.geojson){
@@ -103,7 +104,8 @@
             "type": "FeatureCollection",
             "features": [{
               "type": "Feature",
-              "id": "way/217112801",
+              "id": "way/217112821",
+              "color":"GREEN",
               "properties": {
                 "timestamp": "2013-08-08T08:19:57Z",
                 "version": "3",
@@ -118,10 +120,10 @@
                 "type": "LineString",
                 "coordinates": [
                   [
-                   73.8138811,18.5616884 
+                   73.7840667,18.5622281 
                   ],
                   [
-                   73.8122429,18.5654896 
+                   73.7981509 ,18.5549762 
                   ]
                 ]
               }
@@ -132,9 +134,10 @@
             var features = $scope.geojson.data.features.concat(x.features);
             var copy = angular.extend({}, $scope.geojson.data);
             copy.features = features;
-             $scope.geojson.data = copy;
+            $scope.geojson.data = copy;
+            debugger;
 
-       /* angular.extend($scope, {
+        /*angular.extend($scope, {
             geojson: {
                 data: copy,
                 style: {
@@ -146,8 +149,8 @@
                     fillOpacity: 0.7
                 }
             }
-        });*/
-       /* angular.extend($scope, {
+        });
+       angular.extend($scope, {
             geojson: {
                 data: data,
                 style: 
@@ -156,7 +159,7 @@
     });
 
     // Get the traffic data geojson data from a JSON grey
-    $http.get('/traffic/trafficGraph/getOrangeTraffic').success(function(data, status) {
+   /* $http.get('/traffic/trafficGraph/getOrangeTraffic').success(function(data, status) {
         debugger;
 
         var x = {
@@ -194,7 +197,7 @@
             copy.features = features;
              $scope.geojson.data = copy;
 
-       /* angular.extend($scope, {
+       angular.extend($scope, {
             geojson: {
                 data: copy,
                 style: {
@@ -206,14 +209,14 @@
                     fillOpacity: 0.7
                 }
             }
-        });*/
-       /* angular.extend($scope, {
+        });
+       angular.extend($scope, {
             geojson: {
                 data: data,
                 style: 
             }
-        });*/
-    });
+        });
+    });*/
 
     }
 
