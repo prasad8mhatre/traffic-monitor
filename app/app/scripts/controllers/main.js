@@ -19,7 +19,11 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
             lat: 21.69826549685252,
             lng: 79.5849609375,
             zoom: 4
-        }
+        },legend: {
+            position: 'bottomright',
+            colors: [ 'RED', 'ORANGE', 'GREEN', 'GRAY' ],
+            labels: [ 'Heavy Traffic', 'Moderate Traffic', 'Free Flow Traffic', 'No Traffic Data Available' ]
+        },
     });
 
 
@@ -59,18 +63,17 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
     debugger;
 
     $scope.updateMap = function() {
-        // Get the traffic data geojson data from a JSON red
-        $http.get('/traffic/trafficGraph/getRedTraffic').success(function(data, status) {
-            debugger;
 
+        // Get the traffic data geojson data from a JSON green
+        $http.get('/traffic/getGreenTraffic').success(function(data, status) {
+            debugger;
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
             }
         });
 
-
-        // Get the traffic data geojson data from a JSON green
-        $http.get('/traffic/trafficGraph/getGreenTraffic').success(function(data, status) {
+        // Get the traffic data geojson data from a JSON orange
+        $http.get('/traffic/getOrangeTraffic').success(function(data, status) {
             debugger;
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
@@ -79,9 +82,11 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
             }
         });
 
-        // Get the traffic data geojson data from a JSON orange
-        $http.get('/traffic/trafficGraph/getOrangeTraffic').success(function(data, status) {
+
+         // Get the traffic data geojson data from a JSON red
+        $http.get('/traffic/getRedTraffic').success(function(data, status) {
             debugger;
+
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
             } else {

@@ -138,7 +138,7 @@ exports.addTrafficData = function(req, res){
     });
 }
 
-exports.getGreenTraffic =function(req, res){
+/*exports.getGreenTraffic =function(req, res){
     trafficManager.getTraffic("GREEN").then(function(result){
         console.log("green traffic result:" + result);
         return res.json(result);
@@ -149,6 +149,8 @@ exports.getGreenTraffic =function(req, res){
 }
 
 exports.getRedTraffic =function(req, res){
+    debugger;
+    console.log("************ getRedTraffic: " + req);
     trafficManager.getTraffic("RED").then(function(result){
         console.log("RED traffic result:" + result);
         return res.json(result);
@@ -166,5 +168,5 @@ exports.getOrangeTraffic =function(req, res){
         console.log("ORANGE traffic Error:" + err);
         return res.json(err);
     });
-}
+}*/
 

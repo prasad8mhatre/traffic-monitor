@@ -111,7 +111,9 @@ var setColor = function(road) {
 }
 
 
-exports.getTraffic = function(color){
+/*exports.getTraffic = function(color){
+    debugger;
+    console.log("**********get traffic:" + setColor);
     return new Promise(function(fulfill, reject) {
         RoadController.getTraffic(color).then(function(resp) {
             console.log("**********response:" + resp);
@@ -141,8 +143,12 @@ var getGeoJson = function(resp){
       feature.geometry.type = "LineString";
       var start = JSON.parse(resp.start);
       var end = JSON.parse(resp.end);
-      var cod1 = start.lon + ',' + start.lat;
-      var cod2 = end.lon + ',' + end.lat;
+      var cod1 = [];
+      cod1.push(parseInt(start.lon));
+      cod1.push(parseInt(start.lat)); 
+      var cod2 = [];
+      cod2.push(parseInt(end.lon));
+      cod2.push(parseInt(end.lat));
       feature.geometry.coordinates = [];
       feature.geometry.coordinates.push(cod1);
       feature.geometry.coordinates.push(cod2);
@@ -152,3 +158,4 @@ var getGeoJson = function(resp){
 
 
 
+*/

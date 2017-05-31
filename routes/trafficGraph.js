@@ -7,8 +7,7 @@ const passportConfig = require('../config/passport');
 const TrafficGraphController = require('../controllers/TrafficGraphController');
 const RoadController = require('../controllers/RoadController');
 
-const Road = require('../models/Road');
-const TrafficGraph = require('../models/TrafficGraph');
+
 
 
 //Team
@@ -26,9 +25,9 @@ app.put('/road/:id', passportConfig.isAuthenticated, RoadController.update);
 app.delete('/road/:id', passportConfig.isAuthenticated, RoadController.delete);
 
 app.post('/trafficGraph/locationUpdate', TrafficGraphController.addTrafficData);
-app.get('/trafficGraph/getGreenTraffic', TrafficGraphController.getGreenTraffic);
-app.get('/trafficGraph/getRedTraffic', TrafficGraphController.getRedTraffic);
-app.get('/trafficGraph/getOrangeTraffic', TrafficGraphController.getOrangeTraffic);
+app.get('/getGreenTraffic', RoadController.getGreenTraffic);
+app.get('/getRedTraffic', RoadController.getRedTraffic);
+app.get('/getOrangeTraffic', RoadController.getOrangeTraffic);
 
 
 module.exports = app;

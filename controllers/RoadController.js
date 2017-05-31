@@ -2,7 +2,7 @@
 
 var Road = require('../models/Road').Road;
 
-exports.create = function (req, res) {
+exports.create = function(req, res) {
     Road.create(req.body, function(err, result) {
         if (!err) {
             return res.json(result);
@@ -12,8 +12,8 @@ exports.create = function (req, res) {
     });
 };
 
-exports.get = function (req, res) {
-    Road.get({_id: req.params.id}, function(err, result) {
+exports.get = function(req, res) {
+    Road.get({ _id: req.params.id }, function(err, result) {
         if (!err) {
             return res.json(result);
         } else {
@@ -22,7 +22,7 @@ exports.get = function (req, res) {
     });
 };
 
-exports.getAll = function (req, res) {
+exports.getAll = function(req, res) {
     Road.getAll({}, function(err, result) {
         if (!err) {
             return res.json(result);
@@ -32,7 +32,7 @@ exports.getAll = function (req, res) {
     });
 };
 
-exports.update = function (req, res) {
+exports.update = function(req, res) {
     Road.updateById(req.params.id, req.body, function(err, result) {
         if (!err) {
             return res.json(result);
@@ -42,9 +42,9 @@ exports.update = function (req, res) {
     });
 }
 
-exports.delete = function (req, res) {
+exports.delete = function(req, res) {
 
-    Road.removeById({_id: req.params.id}, function(err, result) {
+    Road.removeById({ _id: req.params.id }, function(err, result) {
         if (!err) {
             return res.json(result);
         } else {
@@ -57,8 +57,8 @@ exports.delete = function (req, res) {
 
 //Controller methods
 
-exports.createRoad = function (road) {
-    return new Promise(function (fulfill, reject){
+exports.createRoad = function(road) {
+    return new Promise(function(fulfill, reject) {
         Road.create(road, function(err, result) {
             if (!err) {
                 fulfill(JSON.stringify(result));
@@ -69,9 +69,9 @@ exports.createRoad = function (road) {
     });
 };
 
-exports.getRoad = function (road) {
-    return new Promise(function (fulfill, reject){    
-        Road.get({_id: road.id}, function(err, result) {
+exports.getRoad = function(road) {
+    return new Promise(function(fulfill, reject) {
+        Road.get({ _id: road.id }, function(err, result) {
             if (!err) {
                 fulfill(JSON.stringify(result));
             } else {
@@ -81,8 +81,8 @@ exports.getRoad = function (road) {
     });
 };
 
-exports.getAllRoad = function () {
-    return new Promise(function (fulfill, reject){    
+exports.getAllRoad = function() {
+    return new Promise(function(fulfill, reject) {
         Road.getAll({}, function(err, result) {
             if (!err) {
                 fulfill(JSON.stringify(result));
@@ -93,8 +93,8 @@ exports.getAllRoad = function () {
     });
 };
 
-exports.updateRoad = function (road) {
-    return new Promise(function (fulfill, reject){   
+exports.updateRoad = function(road) {
+    return new Promise(function(fulfill, reject) {
         Road.updateById(road.roadId, road, function(err, result) {
             if (!err) {
                 fulfill(JSON.stringify(result));
@@ -105,9 +105,9 @@ exports.updateRoad = function (road) {
     });
 }
 
-exports.deleteRoad = function (road) {
-    return new Promise(function (fulfill, reject){   
-        Road.removeById({_id: road.id}, function(err, result) {
+exports.deleteRoad = function(road) {
+    return new Promise(function(fulfill, reject) {
+        Road.removeById({ _id: road.id }, function(err, result) {
             if (!err) {
                 fulfill(JSON.stringify(result));
             } else {
@@ -118,9 +118,11 @@ exports.deleteRoad = function (road) {
 }
 
 
-exports.getTraffic = function (color) {
+/*exports.getTraffic = function (color) {
+    debugger;
     return new Promise(function (fulfill, reject){    
         Road.getAll({color: color}, function(err, result) {
+            debugger;
             if (!err) {
                 console.log("FResult getTraffic" + JSON.stringify(result))
                 fulfill(JSON.stringify(result));
@@ -129,4 +131,67 @@ exports.getTraffic = function (color) {
             }
         });
     });
-};
+};*/
+
+
+exports.getGreenTraffic = function(req, res) {
+    Road.getAll({ color: "GREEN" }, function(err, result) {
+        if (!err) {
+            return res.json(geoJsonConverter(result));
+        } else {
+            return res.send(err); // 500 error
+        }
+    });
+}
+
+exports.getRedTraffic = function(req, res) {
+    Road.getAll({ color: "RED" }, function(err, result) {
+        if (!err) {
+            return res.json(geoJsonConverter(result));
+        } else {
+            return res.send(err); // 500 error
+        }
+    });
+
+}
+
+exports.getOrangeTraffic = function(req, res) {
+    Road.getAll({ color: "ORANGE" }, function(err, result) {
+        if (!err) {
+            return res.json(geoJsonConverter(result));
+        } else {
+            return res.send(err); // 500 error
+        }
+    });
+
+}
+
+
+var geoJsonConverter = function(resp){
+    var geoJson = {};
+    geoJson.type = "FeatureCollection";
+    geoJson.features = [];
+
+    resp.forEach(function(val, index) {
+      var feature = {};
+      feature.type = "Feature";
+      feature.id = val.id;
+      feature.geometry = {};
+      feature.geometry.type = "LineString";
+      feature.color = val.color;
+      var start = JSON.parse(val.start);
+      var end = JSON.parse(val.end);
+      var cod1 = [];
+      cod1.push(start.lon);
+      cod1.push(start.lat); 
+      var cod2 = [];
+      cod2.push(end.lon);
+      cod2.push(end.lat);
+      feature.geometry.coordinates = [];
+      feature.geometry.coordinates.push(cod1);
+      feature.geometry.coordinates.push(cod2);
+      geoJson.features.push(feature);
+    });
+    return geoJson;
+    
+}
