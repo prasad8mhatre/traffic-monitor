@@ -103,7 +103,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
                 'long':73.8125665,
                 'speed':34,
                 'vehiclePubNubId':123,
-                'edgeId':217112808
+                'edgeId':"130522952"
 
             }
         }

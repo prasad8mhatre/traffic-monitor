@@ -7,6 +7,7 @@ var Road = require('../models/Road').Road;
 const TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
 
 const osmManager = require('../managers/osmManager');
+const pubnubManager = require('../managers/pubnubManager');
 
 
 exports.calculateTraffic = function(trafficUpdate) {
@@ -64,10 +65,10 @@ exports.calculateTraffic = function(trafficUpdate) {
 var sendNotification = function (road) {
     //send notification to adjacent road id on pubnub channel
     /*
-    1. find adjacent channel
-    2. send update graph for that roadid
-    3. send message on pubnub channel
+    1. send message on global_traffic channel
     */
+    debugger;
+    pubnubManager.publishMessage(road);
 
 }
 

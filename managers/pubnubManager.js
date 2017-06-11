@@ -1,36 +1,60 @@
 const PubNub = require('pubnub');
+  
+const global_traffic = 'global_traffic' ;
+const TrafficGraphController = require('../controllers/TrafficGraphController');  
+const trafficManager = require('../managers/trafficManager');
+var _this = this;
    
-var pubnub = new PubNub({
-    publishKey : process.env.pubnub_publishKey,
-    subscribeKey : process.env.pubnub_subscribeKey
-});
-   
-exports.publishSampleMessage = function() {
-    console.log("Since we're publishing on subscribe connectEvent, we're sure we'll receive the following publish.");
+exports.publishMessage = function(pub_message) {
+    debugger;
     var publishConfig = {
-        channel : "hello_world",
-        message : "Hello from PubNub Docs!"
+        channel : global_traffic,
+        message : pub_message
     }
-    pubnub.publish(publishConfig, function(status, response) {
-        console.log(status, response);
+    _this.pubnub.publish(publishConfig, function(status, response) {
+        console.log("******** Message Published: [" + global_traffic + "]")
+        console.log(status, response); 
     })
 }
    
-pubnub.addListener({
-    status: function(statusEvent) {
-        if (statusEvent.category === "PNConnectedCategory") {
-            publishSampleMessage();
-        }
-    },
-    message: function(message) {
-        console.log("New Message!!", message);
-    },
-    presence: function() {
-        // handle presence
-    }
-});
 
-console.log("Subscribing..");
-pubnub.subscribe({
-    channels: ['hello_world'] 
-});
+exports.init = function () {
+	_this.pubnub = new PubNub({
+	    publishKey : process.env.pubnub_publishKey,
+	    subscribeKey : process.env.pubnub_subscribeKey
+	});
+
+
+	_this.pubnub.addListener({
+	    status: function(statusEvent) {
+	        if (statusEvent.category === "PNConnectedCategory") {
+	            _this.publishMessage("Global Init Message");
+	        }
+	    },
+	    message: function(message) {
+	        console.log("*******New Message: [" + global_traffic + "]");
+	        console.log(message);
+	       	_this.updateTraffic(message);
+	    },
+	    presence: function() {
+	        // handle presence
+	    }
+	});
+
+	console.log("Subscribing..");
+	_this.pubnub.subscribe({
+	    channels: [global_traffic] 
+	});
+
+}
+
+exports.updateTraffic = function (message) {
+	var trafficUpdate =  TrafficGraphController.createTraffic(message);
+    trafficManager.calculateTraffic(trafficUpdate).then(function(result){
+        console.log("CalculateTraffic result:" + result);
+    }, function(err){
+        console.log("CalculateTraffic Error:" + err);
+    });
+}
+
+

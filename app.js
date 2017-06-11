@@ -22,6 +22,8 @@ const multer = require('multer');
 const jwt         = require('jwt-simple');
 const osmread = require('osm-read');
 const osmManager = require('./managers/osmManager');
+const pubnubManager = require('./managers/pubnubManager');
+
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -119,10 +121,9 @@ app.use('/', routes);
 app.use('/app', passportConfig.isAuthenticated, express.static(__dirname + '/app/app'));
 app.use('/traffic', passportConfig.isAuthenticated, trafficGraph); 
 
-//INIT: call osmManager
+//INIT: call osmManager and init pubnub 
 osmManager.parseOsm();
-
-
+pubnubManager.init();
 
 
 /**

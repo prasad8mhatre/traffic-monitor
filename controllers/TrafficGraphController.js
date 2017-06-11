@@ -2,7 +2,7 @@
 
 var TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
 const trafficManager = require('../managers/trafficManager');
-
+var _this = this;
 
 exports.create = function (req, res) {
     TrafficGraph.create(req.body, function(err, result) {
@@ -118,23 +118,10 @@ exports.deleteTrafficMap = function (edge) {
     });
 }
 
-
-
-
-
-
 exports.addTrafficData = function(req, res){
     //get lat lon and find edge
     debugger;
-    var trafficUpdate = {};
-    trafficUpdate.location = {};
-    trafficUpdate.location.lat = req.body.lat;
-    trafficUpdate.location.long = req.body.long;
-    trafficUpdate.speed = req.body.speed;
-    trafficUpdate.vehiclePubNubId = req.body.vehiclePubNubId;
-    //quickfix for testing remove it
-    trafficUpdate.timestamp = new Date();
-    trafficUpdate.edgeId = req.body.edgeId;
+    var trafficUpdate = _this.createTraffic(req.body);
     trafficManager.calculateTraffic(trafficUpdate).then(function(result){
         console.log("CalculateTraffic result:" + result);
         return res.json(result);
@@ -142,6 +129,18 @@ exports.addTrafficData = function(req, res){
         console.log("CalculateTraffic Error:" + err);
         return res.json(err);
     });
+}
+
+exports.createTraffic = function(traffic) {
+    var trafficUpdate = {};
+    trafficUpdate.location = {};
+    trafficUpdate.location.lat = traffic.lat;
+    trafficUpdate.location.long = traffic.long;
+    trafficUpdate.speed = traffic.speed;
+    trafficUpdate.vehiclePubNubId = traffic.vehiclePubNubId;
+    trafficUpdate.timestamp = new Date();
+    trafficUpdate.edgeId = traffic.edgeId;
+    return trafficUpdate;
 }
 
 /*exports.getGreenTraffic =function(req, res){
