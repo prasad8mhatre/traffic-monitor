@@ -118,8 +118,14 @@ exports.deleteTrafficMap = function (edge) {
     });
 }
 
+
+
+
+
+
 exports.addTrafficData = function(req, res){
     //get lat lon and find edge
+    debugger;
     var trafficUpdate = {};
     trafficUpdate.location = {};
     trafficUpdate.location.lat = req.body.lat;

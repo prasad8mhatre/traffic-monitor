@@ -48,3 +48,13 @@ describe('GET /random-url', () => {
       .expect(404, done);
   });
 });
+
+
+
+describe('GET /traffic/getOrangeTraffic', () => {
+  it('should return 404', (done) => {
+    request(app)
+      .get('/reset')
+      .expect(404, done);
+  });
+});

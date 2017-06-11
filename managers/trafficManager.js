@@ -13,7 +13,7 @@ exports.calculateTraffic = function(trafficUpdate) {
     return new Promise(function(fulfill, reject) {
         var globalTrafficMap = osmManager.getGloabalTrafficMap();
         
-        var road = globalTrafficMap.get(trafficUpdate.edgeId);
+        var road = globalTrafficMap.get(trafficUpdate.edgeId + "");
 
         if (road != null && road != undefined) {
             console.log("**********traffic update: " + JSON.stringify(trafficUpdate));
@@ -40,6 +40,10 @@ exports.calculateTraffic = function(trafficUpdate) {
 
             //TODO:send traffic congestion notification
 
+            if(road.color == 'RED'){
+                sendNotification(road);
+            }
+
             console.log("road: " + JSON.stringify(road));
             if (road != null) {
                 RoadController.updateRoad(road).then(function(resp) {
@@ -50,10 +54,25 @@ exports.calculateTraffic = function(trafficUpdate) {
                     reject(err); // 500 error
                 });
             }
+        }else{
+            reject("No RoadId Found"); 
         }
 
     });
 };
+
+var sendNotification = function (road) {
+    //send notification to adjacent road id on pubnub channel
+    /*
+    1. find adjacent channel
+    2. send update graph for that roadid
+    3. send message on pubnub channel
+    */
+
+}
+
+
+
 
 var calculateWeight = function(road, trafficUpdate) {
     /*cost function = (d, cl, n, f)

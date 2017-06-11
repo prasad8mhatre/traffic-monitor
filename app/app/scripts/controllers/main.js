@@ -11,7 +11,6 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
 
     console.log("In Main Ctrl");
     $scope.Hello = "Hello";
-    debugger;
 
     // Path
     angular.extend($scope, {
@@ -29,7 +28,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
 
 
     var getColor = function(densityColor) {
-        debugger;
+        
         if (densityColor == 'RED') {
             return 'red';
         } else if (densityColor == 'GREEN') {
@@ -60,13 +59,13 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
         };
     };
 
-    debugger;
+    
 
     $scope.updateMap = function() {
 
         // Get the traffic data geojson data from a JSON green
         $http.get('/traffic/getGreenTraffic').success(function(data, status) {
-            debugger;
+            
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
             }
@@ -74,7 +73,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
 
         // Get the traffic data geojson data from a JSON orange
         $http.get('/traffic/getOrangeTraffic').success(function(data, status) {
-            debugger;
+            
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
             } else {
@@ -85,7 +84,6 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
 
          // Get the traffic data geojson data from a JSON red
         $http.get('/traffic/getRedTraffic').success(function(data, status) {
-            debugger;
 
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
@@ -95,6 +93,32 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
         });
 
     }
+
+    $scope.sendMockLocation = function(){
+        var req = {
+         method: 'POST',
+         url: '/traffic/locationUpdate',
+         data: {
+                'lat':18.5647028,
+                'long':73.8125665,
+                'speed':34,
+                'vehiclePubNubId':123,
+                'edgeId':217112808
+
+            }
+        }
+
+        $http(req).then(function(data, status){
+            console.log("location update sent!");   
+            debugger;
+        }, function(data, status){
+            console.log("Error while sending location update!");  
+        });
+        
+    }
+
+
+
 
     var bindTrafficData = function(x) {
         var features = $scope.geojson.data.features.concat(x.features);
