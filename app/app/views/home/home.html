@@ -23,20 +23,33 @@
 <div ui-view>
     <div class="page-header">
         <h3>Welcome to traffic-monitor<span type="button" style="margin-left:10px" class="btn btn-primary" ng-click="updateMap()">Get Updates</span></h3>
-        <span type="button" class="btn btn-primary" ng-click="sendMockLocation()">Send Mock location update</span>
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="lat">Mock Latitude:</label>
+            <input type="text" class="form-control" id="lng" ng-model="lat">
+          </div>
+          <div class="form-group">
+            <label for="lng">Mock Longitude:</label>
+            <input type="text" class="form-control" id="lng" ng-model="lng">
+          </div>
+          
+          <button type="submit" class="btn btn-default" ng-click="sendMockLocation(lat, lng)">Send Mock location</button>
+        </form>
+
+      
         
     </div>
     <div class="row">
         <div class="col-md-8">
-            <leaflet lf-center="center" geojson="geojson" legend="legend" height="470px" width="900px"></leaflet>
+            <leaflet lf-center="center" geojson="geojson" legend="legend" height="420px" width="1300px"></leaflet>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="panel panel-default panel-primary">
                 <div class="panel-body">
                     Logs
                 </div>
                 <div class="panel-footer"></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

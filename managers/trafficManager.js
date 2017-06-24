@@ -41,7 +41,7 @@ exports.calculateTraffic = function(trafficUpdate) {
 
             //TODO:send traffic congestion notification
 
-            if(road.color == 'RED'){
+            if(road.isCongestion){
                 sendNotification(road);
             }
 
@@ -68,7 +68,11 @@ var sendNotification = function (road) {
     1. send message on global_traffic channel
     */
     debugger;
-    pubnubManager.publishMessage(road);
+    var msg = {};
+    msg.code = 100;
+    msg.text = "Congestion at Road Id:" + road.roadId;
+    msg.roadId  = road.roadId;
+    pubnubManager.publishMessage(msg);
 
 }
 
@@ -101,10 +105,17 @@ var smoothSpeed = function(road, trafficUpdate) {
     return speed;
 }
 
+var getCurrentRoadDensity = function(carCount){
+    var car_length = process.env.car_length;
+    var empty_car_space = process.env.empty_car_space;
+
+    return carCount * (car_length + empty_car_space);
+}
+
 var detectCongestion = function(road) {
 
     //Need to change for simulation
-    if (road.vehicles.length > road.capacity) {
+    if (getCurrentRoadDensity(road.vehicles.length) > road.capacity) {
         return true;
     } else {
         return false;
@@ -117,18 +128,19 @@ var setColor = function(road) {
     Red means there are traffic delays. 
     GREY means no traffic density/ update found.
     The more red, the slower the speed of traffic on the road.*/
+    var carDensity = getCurrentRoadDensity(road.vehicles.length);
 
-
-    if (road.vehicles.length > road.capacity) {
+    if (carDensity > road.capacity) {
         return "RED";
-    } else if ((road.vehicles.length > (road.capacity / 2)) && (road.vehicles.length <= road.capacity)) {
+    } else if ((carDensity > (road.capacity / 2)) && (carDensity <= road.capacity)) {
         return "ORANGE";
-    } else if((road.vehicles.length < (road.capacity / 2)) && (road.vehicles.length <= road.capacity))  {
+    } else if((carDensity < (road.capacity / 2)) && (carDensity <= road.capacity))  {
         return "GREEN";
     }else{
         return "GREY";
     }
 }
+
 
 
 /*exports.getTraffic = function(color){

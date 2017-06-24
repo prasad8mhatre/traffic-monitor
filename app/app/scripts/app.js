@@ -68,3 +68,4 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 app.constant('serverUrl', 'localhost:3000');
+app.constant('locationIQ', 'e9fbe60b2244e1a62302');

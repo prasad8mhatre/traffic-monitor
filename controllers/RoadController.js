@@ -1,6 +1,7 @@
 'use strict';
 
 var Road = require('../models/Road').Road;
+const request = require('request');
 
 exports.create = function(req, res) {
     Road.create(req.body, function(err, result) {
@@ -195,3 +196,27 @@ var geoJsonConverter = function(resp){
     return geoJson;
     
 }
+
+
+exports.getRoadId = function(req, res) {
+    if(req.query.lat != undefined && req.query.long != undefined){
+        var url = 'http://locationiq.org/v1/reverse.php?format=json&key=' + process.env.locationIQ +'&lat='+ req.query.lat +'&lon=' + req.query.long + '&addressdetails=1';
+
+        request(url, function (error, response, body) {
+         
+          if (!error) {
+            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
+            console.log('body:', body); // Print the HTML for the Google homepage. 
+            return res.json(body);
+          } else {
+            console.log('error:', error); // Print the error if one occurred
+            return res.send(error); // 500 error
+          }
+          
+        });
+    }else{
+        res.status(500).send({ error: 'Location Missing!' })
+    }
+    
+    
+};

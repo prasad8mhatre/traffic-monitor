@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the traffic-monitor
  */
-app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state, $http) {
+app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function($scope, $state, $http, ApiService) {
 
     console.log("In Main Ctrl");
     $scope.Hello = "Hello";
@@ -94,26 +94,34 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
 
     }
 
-    $scope.sendMockLocation = function(){
-        var req = {
-         method: 'POST',
-         url: '/traffic/locationUpdate',
-         data: {
-                'lat':18.5647028,
-                'long':73.8125665,
-                'speed':34,
-                'vehiclePubNubId':123,
-                'edgeId':"130522952"
+    $scope.sendMockLocation = function(lat, lng){
+        
+        ApiService.getRoadId(lat, lng).then(function(resp){
 
+            var req = {
+             method: 'POST',
+             url: '/traffic/locationUpdate',
+             data: {
+                    'lat':lat,
+                    'long':lng,
+                    'speed':34,
+                    'vehiclePubNubId':123,
+                    'edgeId': JSON.parse(resp.data).osm_id
+
+                }
             }
-        }
 
-        $http(req).then(function(data, status){
-            console.log("location update sent!");   
-            debugger;
-        }, function(data, status){
-            console.log("Error while sending location update!");  
+            $http(req).then(function(data, status){
+                console.log("location update sent!");
+                $scope.updateMap();   
+                debugger;
+            }, function(data, status){
+                console.log("Error while sending location update!");  
+            });
+        }, function(err){
+            console.log(err);
         });
+        
         
     }
 
@@ -130,4 +138,15 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', function($scope, $state
     $scope.updateMap();
 
 
+}]);
+
+
+app.service('ApiService', ['$http', 'locationIQ', function($http, locationIQ){
+   this.getRoadId = function (lat, long) {
+         return $http({
+            method: 'GET',
+            url: '/traffic/getRoadId',
+            params: {'lat': lat, 'long': long}
+        });
+      }
 }]);

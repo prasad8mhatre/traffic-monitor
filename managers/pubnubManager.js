@@ -34,6 +34,7 @@ exports.init = function () {
 	    message: function(message) {
 	        console.log("*******New Message: [" + global_traffic + "]");
 	        console.log(message);
+	        // add condition for is car 
 	       	_this.updateTraffic(message);
 	    },
 	    presence: function() {

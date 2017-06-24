@@ -23,6 +23,7 @@ const jwt         = require('jwt-simple');
 const osmread = require('osm-read');
 const osmManager = require('./managers/osmManager');
 const pubnubManager = require('./managers/pubnubManager');
+const cors = require('cors');
 
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
@@ -108,6 +109,13 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,INCLUDE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}); 
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 

@@ -28,7 +28,7 @@ app.post('/locationUpdate', passportConfig.isAuthenticated, TrafficGraphControll
 app.get('/getGreenTraffic', passportConfig.isAuthenticated, RoadController.getGreenTraffic);
 app.get('/getRedTraffic', passportConfig.isAuthenticated, RoadController.getRedTraffic);
 app.get('/getOrangeTraffic', passportConfig.isAuthenticated, RoadController.getOrangeTraffic);
-
+app.get('/getRoadId', passportConfig.isAuthenticated, RoadController.getRoadId);
 
 module.exports = app;
 
