@@ -84,7 +84,7 @@ var populateRoad = function(way) {
     road.end = JSON.stringify(way.nodeRefs[way.nodeRefs.length - 1]);
     road.isOneWay = way.tags.oneway == 'yes' ? true : false;
     road.name = way.tags.name;
-    road.lanes = way.tags.lanes;
+    road.lanes = way.tags.lanes != undefined ? way.tags.lanes : 2 ;
     road.roadId = way.id;
     road.highway = way.tags.highway;
     road.updatedTime = new Date();
@@ -92,6 +92,12 @@ var populateRoad = function(way) {
         way.nodeRefs[way.nodeRefs.length - 1].lat,
         way.nodeRefs[way.nodeRefs.length - 1].lon);
     road.adjacentRoadId = [];
+    road.vehicles = [];
+    road.weight = 0;
+    road.speed = 0;
+    road.vehicle_count = 0;
+    road.isCongestion = false;
+    road.color = "";    
     /* 4 - Avg car length (3.5 - 5 meters) - car_length
      *  2.5 - Avg distance between two cars - empty_car_space
      *  capacity(no. of vehicle ocupancy = road_length / (car_lengt * empty_car_space * road_lanes))
@@ -153,7 +159,7 @@ exports.parseOsm = function() {
             nodeMap.set(node.id, node);
         },
         way: function(way) {
-            if (way.tags.highway == 'primary' || way.tags.highway == 'secondary') { //
+            if (way.tags.highway == 'primary' || way.tags.highway == 'secondary' || way.tags.highway == 'tertiary') { //
                 way.nodeRefs.forEach(function(val, key) {
                     way.nodeRefs[key] = nodeMap.get(val);
                 });

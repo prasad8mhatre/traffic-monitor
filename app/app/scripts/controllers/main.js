@@ -97,27 +97,31 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
     $scope.sendMockLocation = function(lat, lng){
         
         ApiService.getRoadId(lat, lng).then(function(resp){
+            var data = JSON.parse(resp.data);
+            if(data.osm_type == 'way'){
+                var req = {
+                 method: 'POST',
+                 url: '/traffic/locationUpdate',
+                 data: {
+                        'lat':lat,
+                        'long':lng,
+                        'speed':34,
+                        'vehiclePubNubId':123,
+                        'edgeId': JSON.parse(resp.data).osm_id
 
-            var req = {
-             method: 'POST',
-             url: '/traffic/locationUpdate',
-             data: {
-                    'lat':lat,
-                    'long':lng,
-                    'speed':34,
-                    'vehiclePubNubId':123,
-                    'edgeId': JSON.parse(resp.data).osm_id
-
+                    }
                 }
-            }
 
-            $http(req).then(function(data, status){
-                console.log("location update sent!");
-                $scope.updateMap();   
-                debugger;
-            }, function(data, status){
-                console.log("Error while sending location update!");  
-            });
+                $http(req).then(function(data, status){
+                    console.log("location update sent!");
+                    $scope.updateMap();   
+                    debugger;
+                }, function(data, status){
+                    console.log("Error while sending location update!");  
+                });
+            }else{
+                console.log("No Wayid found for given lat long.")
+            }
         }, function(err){
             console.log(err);
         });

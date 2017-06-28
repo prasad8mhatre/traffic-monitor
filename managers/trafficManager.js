@@ -8,6 +8,7 @@ const TrafficGraph = require('../models/TrafficGraph').TrafficGraph;
 
 const osmManager = require('../managers/osmManager');
 const pubnubManager = require('../managers/pubnubManager');
+var _this = this;
 
 
 exports.calculateTraffic = function(trafficUpdate) {
@@ -20,15 +21,17 @@ exports.calculateTraffic = function(trafficUpdate) {
             console.log("**********traffic update: " + JSON.stringify(trafficUpdate));
 
             var vehicle = {};
-            vehicle.vehiclePubNubId = trafficUpdate.vehiclePubNubId;
+            vehicle.uuid = trafficUpdate.uuid;
             vehicle.timestamp = trafficUpdate.timestamp;
-            vehicle.location = trafficUpdate.location;
-            vehicle.edge = trafficUpdate.edge;
+            vehicle.edgeId = trafficUpdate.edgeId;
            
             if (road.vehicles == undefined) {
                 road.vehicles = [];
             }
-            road.vehicles.push(JSON.stringify(vehicle));
+            if(!_this.isPresent(road, vehicle)){
+              road.vehicles.push(JSON.stringify(vehicle));
+            }
+            
 
             road.weight = calculateWeight(road, trafficUpdate);
             road.speed = smoothSpeed(road, trafficUpdate);
@@ -62,6 +65,17 @@ exports.calculateTraffic = function(trafficUpdate) {
     });
 };
 
+exports.isPresent = function(road, trafficUpdate) {
+    var found = false;
+    road.vehicles.forEach(function(val){
+        var vehicle = JSON.parse(val);
+        if(vehicle.uuid == trafficUpdate.uuid){
+            found = true;
+        }
+    });
+    return found;
+}
+
 var sendNotification = function (road) {
     //send notification to adjacent road id on pubnub channel
     /*
@@ -72,6 +86,7 @@ var sendNotification = function (road) {
     msg.code = 100;
     msg.text = "Congestion at Road Id:" + road.roadId;
     msg.roadId  = road.roadId;
+    msg.isCar = false;
     pubnubManager.publishMessage(msg);
 
 }
@@ -115,7 +130,10 @@ var getCurrentRoadDensity = function(carCount){
 var detectCongestion = function(road) {
 
     //Need to change for simulation
-    if (getCurrentRoadDensity(road.vehicles.length) > road.capacity) {
+    console.log("Road:" + JSON.stringify(road));
+    console.log("Road desity: " + (getCurrentRoadDensity(road.vehicles.length) > road.capacity) );
+    console.log("Road Speed :" + (road.speed < 30));
+    if ((getCurrentRoadDensity(road.vehicles.length) > road.capacity)  && road.speed < 30) {
         return true;
     } else {
         return false;
@@ -130,11 +148,11 @@ var setColor = function(road) {
     The more red, the slower the speed of traffic on the road.*/
     var carDensity = getCurrentRoadDensity(road.vehicles.length);
 
-    if (carDensity > road.capacity) {
+    if (carDensity > road.capacity && (road.speed < 30)) {
         return "RED";
-    } else if ((carDensity > (road.capacity / 2)) && (carDensity <= road.capacity)) {
+    } else if ((carDensity > (road.capacity / 2)) && (carDensity <= road.capacity)  && (road.speed > 30 && road.speed < 50) ) {
         return "ORANGE";
-    } else if((carDensity < (road.capacity / 2)) && (carDensity <= road.capacity))  {
+    } else if((carDensity < (road.capacity / 2)) && (carDensity <= road.capacity) && (road.speed > 50 && road.speed < 70))  {
         return "GREEN";
     }else{
         return "GREY";

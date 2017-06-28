@@ -126,18 +126,15 @@ exports.addTrafficData = function(req, res){
         console.log("CalculateTraffic result:" + result);
         return res.json(result);
     }, function(err){
-        console.log("CalculateTraffic Error:" + err);
+        console.log("Traffic Controller: CalculateTraffic Error:" + err);
         return res.json(err);
     });
 }
 
 exports.createTraffic = function(traffic) {
     var trafficUpdate = {};
-    trafficUpdate.location = {};
-    trafficUpdate.location.lat = traffic.lat;
-    trafficUpdate.location.long = traffic.long;
     trafficUpdate.speed = traffic.speed;
-    trafficUpdate.vehiclePubNubId = traffic.vehiclePubNubId;
+    trafficUpdate.uuid = traffic.uuid;
     trafficUpdate.timestamp = new Date();
     trafficUpdate.edgeId = traffic.edgeId;
     return trafficUpdate;

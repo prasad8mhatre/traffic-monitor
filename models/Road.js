@@ -38,7 +38,7 @@ RoadSchema.statics = {
         this.find(query, callback);
     },
     updateById: function(roadId, updateData, callback) {
-        this.update(roadId, {$set: updateData}, callback);
+        this.update({roadId: roadId}, {$set: updateData}, callback);
     },
     remove: function(removeData, callback) {
          this.remove(removeData, callback);

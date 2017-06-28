@@ -35,7 +35,7 @@ exports.init = function () {
 	        console.log("*******New Message: [" + global_traffic + "]");
 	        console.log(message);
 	        // add condition for is car 
-	       	_this.updateTraffic(message);
+	       	_this.updateTraffic(message.message);
 	    },
 	    presence: function() {
 	        // handle presence
@@ -52,9 +52,9 @@ exports.init = function () {
 exports.updateTraffic = function (message) {
 	var trafficUpdate =  TrafficGraphController.createTraffic(message);
     trafficManager.calculateTraffic(trafficUpdate).then(function(result){
-        console.log("CalculateTraffic result:" + result);
+        console.log("Pubnub Manager: CalculateTraffic result:" + result);
     }, function(err){
-        console.log("CalculateTraffic Error:" + err);
+        console.log("Pubnub Manager: CalculateTraffic Error:" + err);
     });
 }
 
