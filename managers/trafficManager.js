@@ -83,7 +83,7 @@ var sendNotification = function (road) {
     */
     debugger;
     var msg = {};
-    msg.code = 100;
+    msg.code = 101;
     msg.text = "Congestion at Road Id:" + road.roadId;
     msg.roadId  = road.roadId;
     msg.isCar = false;
@@ -150,9 +150,9 @@ var setColor = function(road) {
 
     if (carDensity > road.capacity && (road.speed < 30)) {
         return "RED";
-    } else if ((carDensity > (road.capacity / 2)) && (carDensity <= road.capacity)  && (road.speed > 30 && road.speed < 50) ) {
+    } else if (carDensity > (road.capacity / 2)  ) {
         return "ORANGE";
-    } else if((carDensity < (road.capacity / 2)) && (carDensity <= road.capacity) && (road.speed > 50 && road.speed < 70))  {
+    } else if(carDensity < (road.capacity / 2))  {
         return "GREEN";
     }else{
         return "GREY";
