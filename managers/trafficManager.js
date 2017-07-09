@@ -19,34 +19,50 @@ exports.calculateTraffic = function(trafficUpdate) {
 
         if (road != null && road != undefined) {
             console.log("**********traffic update: " + JSON.stringify(trafficUpdate));
-
-            var vehicle = {};
-            vehicle.uuid = trafficUpdate.uuid;
-            vehicle.timestamp = trafficUpdate.timestamp;
-            vehicle.edgeId = trafficUpdate.edgeId;
-           
             if (road.vehicles == undefined) {
                 road.vehicles = [];
             }
-            if(!_this.isPresent(road, vehicle)){
-              road.vehicles.push(JSON.stringify(vehicle));
-            }
-            
-
-            road.weight = calculateWeight(road, trafficUpdate);
-            road.speed = smoothSpeed(road, trafficUpdate);
             if (road.vehicle_count == null || road.vehicle_count == undefined) {
                 road.vehicle_count = 0;
             }
-            road.vehicle_count = road.vehicle_count + 1;
-            road.isCongestion = detectCongestion(road);
-            road.color = setColor(road);
+            //mock simulation of traffic congestion
+            if(trafficUpdate.isMock){
+                console.log("*********** Mocking traffic congestion")
+                road.weight = road.capacity + 1;
+                road.speed = smoothSpeed(road, trafficUpdate);
+                road.isCongestion = true;
+                road.color = "RED";
+                //send traffic congestion notification
+                if(road.isCongestion){
+                    sendNotification(road);
+                }
 
-            //TODO:send traffic congestion notification
+            }else{
+                //actual traffic data 
+                var vehicle = {};
+                vehicle.uuid = trafficUpdate.uuid;
+                vehicle.timestamp = trafficUpdate.timestamp;
+                vehicle.edgeId = trafficUpdate.edgeId;
+                
+                if(!_this.isPresent(road, vehicle)){
+                  road.vehicles.push(JSON.stringify(vehicle));
+                }
+                
 
-            if(road.isCongestion){
-                sendNotification(road);
+                road.weight = calculateWeight(road, trafficUpdate);
+                road.speed = smoothSpeed(road, trafficUpdate);
+                
+                road.vehicle_count = road.vehicle_count + 1;
+                road.isCongestion = detectCongestion(road);
+                road.color = setColor(road);
+
+                //TODO:send traffic congestion notification
+
+                if(road.isCongestion){
+                    sendNotification(road);
+                }
             }
+            
 
             console.log("road: " + JSON.stringify(road));
             if (road != null) {

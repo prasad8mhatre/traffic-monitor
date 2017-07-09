@@ -137,6 +137,11 @@ exports.createTraffic = function(traffic) {
     trafficUpdate.uuid = traffic.uuid;
     trafficUpdate.timestamp = new Date();
     trafficUpdate.edgeId = traffic.edgeId;
+    if(traffic.isMock != undefined){
+        trafficUpdate.isMock = traffic.isMock;
+    }else{
+        trafficUpdate.isMock = false;
+    }
     return trafficUpdate;
 }
 

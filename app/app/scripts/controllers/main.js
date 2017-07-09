@@ -97,17 +97,17 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
     $scope.sendMockLocation = function(lat, lng){
         
         ApiService.getRoadId(lat, lng).then(function(resp){
-            var data = JSON.parse(resp.data);
+            //var data = JSON.parse(resp.data);
+            var data = resp.data;
             if(data.osm_type == 'way'){
                 var req = {
                  method: 'POST',
                  url: '/traffic/locationUpdate',
                  data: {
-                        'lat':lat,
-                        'long':lng,
-                        'speed':34,
-                        'vehiclePubNubId':123,
-                        'edgeId': JSON.parse(resp.data).osm_id
+                        'speed':14,
+                        'uuid':123,
+                        'edgeId': data.osm_id,
+                        'isMock': true 
 
                     }
                 }
@@ -145,12 +145,18 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
 }]);
 
 
-app.service('ApiService', ['$http', 'locationIQ', function($http, locationIQ){
+app.service('ApiService', ['$http', 'locationIQ', '$q', function($http, locationIQ, $q){
    this.getRoadId = function (lat, long) {
-         return $http({
+        return $q(function(resolve, reject) {
+          setTimeout(function() {
+              resolve({"data":{"place_id":"128321428","licence":"Data © OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright","osm_type":"way","osm_id":"250162145","lat":"18.5645653","lon":"73.7750516","display_name":"Baner Road, Pimple Nilakh, Mhalunge, Pune, Maharashtra, 411045, India","address":{"road":"Baner Road","suburb":"Pimple Nilakh","village":"Mhalunge","county":"Pune","state_district":"Pune","state":"Maharashtra","postcode":"411045","country":"India","country_code":"in"},"boundingbox":["18.5623192","18.5686997","73.7666714","73.7839222"]},"status":200,"config":{"method":"GET","transformRequest":[null],"transformResponse":[null],"url":"http://locationiq.org/v1/reverse.php?format=json&key=e9fbe60b2244e1a62302&lat=18.5664275&lon=73.7702451&addressdetails=1","headers":{"Accept":"application/json, text/plain, */*"}},"statusText":"OK"});
+          }, 1000);
+        }); 
+
+         /*return $http({
             method: 'GET',
             url: '/traffic/getRoadId',
             params: {'lat': lat, 'long': long}
-        });
+        });*/
       }
 }]);
