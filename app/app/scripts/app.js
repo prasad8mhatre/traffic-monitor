@@ -64,8 +64,20 @@ app.config(function($stateProvider, $urlRouterProvider) {
     }
   });
 
+  $stateProvider.state('app.certificate', {
+    url: '/certificate',
+    templateUrl: 'views/home/certificate.html',
+    controller : 'CertificateCtrl',
+    data: {
+      title: 'certificate'
+    },
+    ncyBreadcrumb: {
+      label: 'certificate'
+    }
+  });
+
   $urlRouterProvider.otherwise('/app/home');
 });
 
-app.constant('serverUrl', 'localhost:3000');
+app.constant('serverUrl', 'http://localhost:3000/');
 app.constant('locationIQ', 'e9fbe60b2244e1a62302');

@@ -2,6 +2,7 @@
 
 var Vehicle = require('../models/Vehicle').Vehicle;
 const request = require('request');
+const pubnubManager = require('../managers/pubnubManager');
 
 exports.create = function(req, res) {
     var vehicle = {};
@@ -38,8 +39,10 @@ exports.getAll = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    Vehicle.updateById(req.params.id, req.body, function(err, result) {
+    Vehicle.updateById(req.body.vehicleId, req.body, function(err, result) {
         if (!err) {
+            //send notification to client
+            sendNotification(req.body);
             return res.json(result);
         } else {
             return res.send(err); // 500 error
@@ -65,7 +68,7 @@ exports.postMobileLogin = function(req, res) {
     Vehicle.get({ 'vehicleId': req.query.vehicleId }, function(err, result) {
         if (!err && result[0] != undefined) {
             if(result[0].password == req.query.password && result[0].isActive){
-                return res.send(true);
+                return res.send(JSON.stringify(result[0]));
             }else{
                  return res.send(false);
             }
@@ -74,6 +77,17 @@ exports.postMobileLogin = function(req, res) {
         }
     });
     
+}
+
+var sendNotification = function (vehicle) {
+    var msg = {};
+    msg.code = 105;
+    msg.text = "Access Rule Changed for vehicle : " + vehicle.vehicleId;
+    msg.isActive = vehicle.isActive;
+    msg.vehicleId  = vehicle.vehicleId;
+    msg.isCar = false;
+    pubnubManager.publishMessage(msg);
+
 }
 
 

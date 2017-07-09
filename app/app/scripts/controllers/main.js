@@ -145,7 +145,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
 }]);
 
 
-app.service('ApiService', ['$http', 'locationIQ', '$q', function($http, locationIQ, $q){
+app.service('ApiService', ['$http', 'locationIQ', '$q', 'serverUrl', function($http, locationIQ, $q, serverUrl){
    this.getRoadId = function (lat, long) {
         return $q(function(resolve, reject) {
           setTimeout(function() {
@@ -158,5 +158,22 @@ app.service('ApiService', ['$http', 'locationIQ', '$q', function($http, location
             url: '/traffic/getRoadId',
             params: {'lat': lat, 'long': long}
         });*/
-      }
+    }
+
+    this.getAllVehicles = function(){
+        return $http({
+            method: 'GET',
+            url: serverUrl + 'vehicle/mobile/getAllVehicles'
+        });
+    }
+
+    this.updateVehicle = function(data){
+        return $http({
+            method: 'POST',
+            url: serverUrl + 'vehicle/mobile/updateVehicle',
+            data : data 
+        });
+    }
+
+
 }]);
