@@ -122,12 +122,14 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 //Routes
 const routes = require('./routes/routes');
 const trafficGraph = require('./routes/trafficGraph');
+const vehicle = require('./routes/vehicle');
 app.use('/', routes);
 
 
 //interscepting api and app with authenticated check
 app.use('/app', passportConfig.isAuthenticated, express.static(__dirname + '/app/app'));
-app.use('/traffic', passportConfig.isAuthenticated, trafficGraph); 
+app.use('/traffic', passportConfig.isAuthenticated, trafficGraph);
+app.use('/vehicle', vehicle); 
 
 //INIT: call osmManager and init pubnub 
 osmManager.parseOsm();
