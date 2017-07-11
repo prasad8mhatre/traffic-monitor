@@ -145,6 +145,18 @@ exports.createTraffic = function(traffic) {
     return trafficUpdate;
 }
 
+exports.deleteAllDataFromTrafficMap = function () {
+    return new Promise(function (fulfill, reject){  
+        TrafficGraph.removeall({}, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
+}
+
 /*exports.getGreenTraffic =function(req, res){
     trafficManager.getTraffic("GREEN").then(function(result){
         console.log("green traffic result:" + result);

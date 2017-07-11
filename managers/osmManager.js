@@ -116,15 +116,7 @@ var populateRoad = function(way) {
     return road;
 }
 
-exports.parseOsm = function() {
-    //osm parser
-
-    //osm to  geojson
-
-    console.log("******************")
-    //geojson = osm_geojson.osm2geojson(process.env.mapURI, true); 
-    //console.log("*****************geojson" + JSON.stringify(geojson));
-
+var parseData = function(){
     var globalTrafficMap = new Map();
     var nodeMap = new Map();
     var parser = osmread.parse({
@@ -179,5 +171,29 @@ exports.parseOsm = function() {
             console.log('error: ' + msg);
         }
     });
+} 
 
+
+exports.parseOsm = function() {
+    //osm parser
+    console.log("******************Parsing started")
+    if(process.env.reset_map_on_startup === 'true'){
+        //clear traffic and road map 
+        TrafficGraphController.deleteAllDataFromTrafficMap().then(function(trafficGraphdeleteResp) {
+            debugger;
+            RoadController.deleteAllDataFromRoadMap().then(function(roadResp){
+                //parse data
+                debugger;
+                console.log("****************Cleared traffic and road map");
+                parseData();
+            }, function(roadErr){
+                console.log("Road map query Error:" + roadErr);
+            });
+        }, function(trafficGraphdeleteErr) {
+            console.log("Traffic Graph query Error:" + trafficGraphdeleteErr);
+        });
+
+    }else{
+        parseData();
+    }
 }

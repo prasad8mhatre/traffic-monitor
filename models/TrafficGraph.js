@@ -23,7 +23,7 @@ TrafficGraphSchema.statics = {
     updateById: function(id, updateData, callback) {
         this.update(id, {$set: updateData}, callback);
     },
-    remove: function(removeData, callback) {
+    removeall: function(removeData, callback) {
          this.remove(removeData, callback);
     },
     create: function(data, callback) {

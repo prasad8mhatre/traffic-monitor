@@ -217,6 +217,17 @@ exports.getRoadId = function(req, res) {
     }else{
         res.status(500).send({ error: 'Location Missing!' })
     }
-    
+}
+
+exports.deleteAllDataFromRoadMap = function () {
+    return new Promise(function (fulfill, reject){  
+        Road.removeall({}, function(err, result) {
+            if (!err) {
+                fulfill(JSON.stringify(result));
+            } else {
+                reject(JSON.stringify(err)); // 500 error
+            }
+        });
+    });
     
 };
