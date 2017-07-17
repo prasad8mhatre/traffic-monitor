@@ -28,14 +28,17 @@ exports.init = function () {
 	_this.pubnub.addListener({
 	    status: function(statusEvent) {
 	        if (statusEvent.category === "PNConnectedCategory") {
-	            _this.publishMessage("Global Init Message");
+	            var msg = {code:100, text : 'Global Init Message'}
+	            _this.publishMessage(msg);
 	        }
 	    },
 	    message: function(message) {
 	        console.log("*******New Message: [" + global_traffic + "]");
 	        console.log(message);
-	        // add condition for is car 
-	       	_this.updateTraffic(message.message);
+	        // add condition for is car
+	        if(message.message.code != 100){
+	        	_this.updateTraffic(message.message);		
+	        } 
 	    },
 	    presence: function() {
 	        // handle presence

@@ -200,7 +200,7 @@ var geoJsonConverter = function(resp){
 
 exports.getRoadId = function(req, res) {
     if(req.query.lat != undefined && req.query.long != undefined){
-        var url = 'http://locationiq.org/v1/reverse.php?format=json&key=' + process.env.locationIQ +'&lat='+ req.query.lat +'&lon=' + req.query.long + '&addressdetails=1';
+        var url = 'http://locationiq.org/v1/reverse.php?format=json&key=' + process.env.locationIQ +'&lat='+ req.query.lat +'&lon=' + req.query.long + '&addressdetails=1&osm_type=W';
 
         request(url, function (error, response, body) {
          
