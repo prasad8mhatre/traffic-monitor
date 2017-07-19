@@ -115,7 +115,6 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
                 $http(req).then(function(data, status){
                     console.log("location update sent!");
                     $scope.updateMap();   
-                    debugger;
                 }, function(data, status){
                     console.log("Error while sending location update!");  
                 });
