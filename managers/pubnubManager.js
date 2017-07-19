@@ -45,7 +45,7 @@ exports.init = function () {
 	    }
 	});
 
-	console.log("Subscribing..");
+	console.log("Init:Subscribing to Global Channel..");
 	_this.pubnub.subscribe({
 	    channels: [global_traffic] 
 	});

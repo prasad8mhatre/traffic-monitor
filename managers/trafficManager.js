@@ -46,13 +46,12 @@ exports.calculateTraffic = function(trafficUpdate) {
                 
                 if(!_this.isPresent(road, vehicle)){
                   road.vehicles.push(JSON.stringify(vehicle));
+                  road.vehicle_count = road.vehicle_count + 1;
                 }
                 
 
                 road.weight = calculateWeight(road, trafficUpdate);
                 road.speed = smoothSpeed(road, trafficUpdate);
-                
-                road.vehicle_count = road.vehicle_count + 1;
                 road.isCongestion = detectCongestion(road);
                 road.color = setColor(road);
 
@@ -137,18 +136,14 @@ var smoothSpeed = function(road, trafficUpdate) {
 }
 
 var getCurrentRoadDensity = function(carCount){
-    var car_length = process.env.car_length;
-    var empty_car_space = process.env.empty_car_space;
-
+    var car_length = parseInt(process.env.car_length);
+    var empty_car_space = parseInt(process.env.empty_car_space);
     return carCount * (car_length + empty_car_space);
 }
 
 var detectCongestion = function(road) {
 
     //Need to change for simulation
-    console.log("Road:" + JSON.stringify(road));
-    console.log("Road desity: " + (getCurrentRoadDensity(road.vehicles.length) > road.capacity) );
-    console.log("Road Speed :" + (road.speed < 30));
     if ((getCurrentRoadDensity(road.vehicles.length) > road.capacity)  && road.speed < 30) {
         return true;
     } else {
@@ -174,54 +169,3 @@ var setColor = function(road) {
         return "GREY";
     }
 }
-
-
-
-/*exports.getTraffic = function(color){
-    debugger;
-    console.log("**********get traffic:" + setColor);
-    return new Promise(function(fulfill, reject) {
-        RoadController.getTraffic(color).then(function(resp) {
-            console.log("**********response:" + resp);
-            //create geojson 
-
-
-            fulfill(getGeoJson(resp));
-        }, function(err) {
-            console.log("Road Query Error:" + err);
-            reject(err); // 500 error
-        });
-
-    });
-}
-
-
-var getGeoJson = function(resp){
-    var geoJson = {};
-    geojson.type = "FeatureCollection";
-    geojson.features = [];
-
-    resp.forEach(function(val, index) {
-      var feature = {};
-      feature.type = "Feature";
-      feature.id = val.id;
-      feature.geometry = {};
-      feature.geometry.type = "LineString";
-      var start = JSON.parse(resp.start);
-      var end = JSON.parse(resp.end);
-      var cod1 = [];
-      cod1.push(parseInt(start.lon));
-      cod1.push(parseInt(start.lat)); 
-      var cod2 = [];
-      cod2.push(parseInt(end.lon));
-      cod2.push(parseInt(end.lat));
-      feature.geometry.coordinates = [];
-      feature.geometry.coordinates.push(cod1);
-      feature.geometry.coordinates.push(cod2);
-    });
-    
-}
-
-
-
-*/

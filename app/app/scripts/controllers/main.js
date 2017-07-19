@@ -97,8 +97,8 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
     $scope.sendMockLocation = function(lat, lng){
         
         ApiService.getRoadId(lat, lng).then(function(resp){
-            //var data = JSON.parse(resp.data);
-            var data = resp.data;
+            var data = JSON.parse(resp.data);
+            //var data = resp.data;
             if(data.osm_type == 'way'){
                 var req = {
                  method: 'POST',
