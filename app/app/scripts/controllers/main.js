@@ -64,7 +64,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
     $scope.updateMap = function() {
 
         // Get the traffic data geojson data from a JSON green
-        $http.get('/traffic/getGreenTraffic').success(function(data, status) {
+        $http.get('/traffic/getGreenTraffic').then(function(data, status) {
             
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
@@ -72,7 +72,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
         });
 
         // Get the traffic data geojson data from a JSON orange
-        $http.get('/traffic/getOrangeTraffic').success(function(data, status) {
+        $http.get('/traffic/getOrangeTraffic').then(function(data, status) {
             
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
@@ -83,7 +83,7 @@ app.controller('MainCtrl', ['$scope', '$state', '$http', 'ApiService', function(
 
 
          // Get the traffic data geojson data from a JSON red
-        $http.get('/traffic/getRedTraffic').success(function(data, status) {
+        $http.get('/traffic/getRedTraffic').then(function(data, status) {
 
             if (!$scope.geojson || angular.isUndefined($scope.geojson)) {
                 $scope.geojson = createGeoJsonObject(data);
