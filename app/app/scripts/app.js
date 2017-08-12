@@ -79,5 +79,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/app/home');
 });
 
-app.constant('serverUrl', 'http://localhost:3000/');
+app.constant('serverUrl', 'https://serene-basin-44447.herokuapp.com:3000/');
 app.constant('locationIQ', 'e9fbe60b2244e1a62302');
